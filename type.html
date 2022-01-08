@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<title>typing</title>
+</head>
+
+<style type="text/css">
+		
+	/*underlining the active letter */
+	.active {
+		text-decoration: underline darkturquoise;
+	}
+
+	/*correct typed letter's style*/
+	.correct {
+		color: green;
+	}
+
+	/*incorrect typed letter's style*/
+	.incorrect {
+		color: red;
+	}
+</style>
+
+<body onkeydown="test_fn(event)" onload="get_text_ready()">
+
+	<h3 id="match_it">this is text</h3>
+	<div id="results"></div>
+
+	<script type="text/javascript">
+		
+		let pos=0;
+		let count_incorrects = '';
+		let count_corrects = '';
+		let count_backspaces = '';
+		let incorrect_pos = '';
+		let spans = '';
+
+		// array containing keyCodes of keys which are not required in typing
+		let except_keys = [9, 17, 16, 18, 20, 27, 33, 34, 35, 36, 45, 46, 37, 38, 39, 40, 91, 93, 96, 97, 98, 99, 100, 101, 102, 103, 104, 					105, 106, 107, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 144, 181, 182, 183]
+
+		// gets the text ready for typing test
+		function get_text_ready() {
+			
+			let text = '';
+			let txt_arr = document.getElementById('match_it').innerHTML;
+			
+			for (var i = 0; i < txt_arr.length; i++) {
+				if (i==0) {
+					text += "<span class='char_span active'>"+txt_arr[i]+"</span>";
+				}
+				else {
+					text += "<span class='char_span'>"+txt_arr[i]+"</span>";
+				}
+			}
+			text+="<span class='char_span'>&#10149</span>";
+			document.getElementById('match_it').innerHTML = text;
+
+			spans = document.getElementsByClassName('char_span');
+		}
+
+		// typing test is handler
+		function test_fn(e) {
+
+			// exit on exception key pressed
+			if (except_keys.indexOf(e.keyCode) != -1) {
+				return;
+			}
+
+			if (pos+1 == spans.length) {
+				if (e.keyCode != 13) {
+					console.log("test is complete, please press enter !!");
+					return;
+				}
+			}
+
+			current_sp = spans[pos];
+			
+
+			if (pos+1 < spans.length) {
+				next_sp = spans[pos+1];
+			}
+			if (pos-1 >= 0) {
+				previous_sp = spans[pos-1];
+			}
+			// backspace detector
+			if (e.keyCode != 8 || pos == 0) {
+				if (e.keyCode == 8) {
+					return;
+				}
+				
+				if (pos == spans.length) {
+					// current_sp = spans[spans.length - 1];
+					return;
+				}
+				++pos;
+				next_sp.classList.add("active");
+
+				if (e.key==current_sp.innerHTML) {
+					current_sp.classList.add("correct");
+					current_sp.classList.remove("active");
+
+					count_corrects++;
+				}
+				else {
+					current_sp.classList.add("incorrect");
+					current_sp.classList.remove("active");
+
+					// incorrect_pos = pos;
+					count_incorrects++;
+				}
+			}
+			// backspace handler
+			else {
+				--pos;
+				count_backspaces++;
+
+				current_sp.classList.remove("active");
+				previous_sp.classList.remove("correct");
+				previous_sp.classList.remove("incorrect");
+				previous_sp.classList.add("active");
+			}
+
+			document.getElementById("results").innerHTML = "corrects = "+(count_corrects - count_backspaces)+", incorrects = "+count_incorrects+", backspaces = "+count_backspaces+", pos = "+pos;
+		}
+
+	</script>
+
+
+
+</body>
+</html>
