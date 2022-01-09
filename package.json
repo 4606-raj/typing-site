@@ -1,0 +1,19 @@
+{
+  "name": "typing-site",
+  "version": "1.0.0",
+  "description": "Inspired from typing.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4606-raj/typing-site.git"
+  },
+  "author": "raj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/4606-raj/typing-site/issues"
+  },
+  "homepage": "https://github.com/4606-raj/typing-site#readme"
+}
